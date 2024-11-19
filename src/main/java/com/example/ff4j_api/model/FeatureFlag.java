@@ -25,6 +25,9 @@ public class FeatureFlag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "NAME", unique = true, nullable = false)
+    private String name;
+
     @Column(name = "FEATURE_KEY", unique = true, nullable = false)
     private String featureKey;
 
