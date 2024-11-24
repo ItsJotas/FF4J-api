@@ -23,6 +23,6 @@ public class Phase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "DESCRIPTION", nullable = false)
-    private String description;
+    @Column(name = "NAME", nullable = false)
+    private String name;
 }
