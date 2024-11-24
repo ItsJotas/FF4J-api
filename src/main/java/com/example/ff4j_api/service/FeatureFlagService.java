@@ -3,7 +3,7 @@ package com.example.ff4j_api.service;
 import com.example.ff4j_api.model.Application;
 import com.example.ff4j_api.model.FeatureFlag;
 import com.example.ff4j_api.model.Phase;
-import com.example.ff4j_api.model.dto.FeatureFlagCreateDTO;
+import com.example.ff4j_api.model.dto.input.FeatureFlagCreateDTO;
 import com.example.ff4j_api.repository.FeatureFlagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,7 +1,7 @@
 package com.example.ff4j_api.controller;
 
-import com.example.ff4j_api.model.dto.input.FeatureFlagCreateDTO;
-import com.example.ff4j_api.service.FeatureFlagService;
+import com.example.ff4j_api.model.dto.input.ApplicationCreateDTO;
+import com.example.ff4j_api.service.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/feature-flag")
+@RequestMapping("/application")
 @RequiredArgsConstructor
-public class FeatureFlagController {
+public class ApplicationController {
 
-    private final FeatureFlagService service;
+    private final ApplicationService service;
 
     @PostMapping
-    public ResponseEntity<?> createFeatureFlag(@RequestBody @Valid FeatureFlagCreateDTO featureFlagCreateDTO){
-        service.createFeatureFlag(featureFlagCreateDTO);
+    public ResponseEntity<?> createApplication(@RequestBody @Valid ApplicationCreateDTO applicationCreateDTO){
+        service.createApplication(applicationCreateDTO);
         return ResponseEntity.ok().build();
     }
 }
