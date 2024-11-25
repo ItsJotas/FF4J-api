@@ -14,7 +14,7 @@ import lombok.Setter;
 public class ApplicationCreateDTO {
 
     @NotNull(message = "Field Application Name cannot be empty.")
-    @Size(message = "The field Application Name must not exceed 20 characters.", max = 20)
+    @Size(message = "Field Application Name must have more than 3 and less than 20 letters.", min = 3, max = 20)
     private String applicationName;
 
     @NotNull(message = "Field Application Name cannot be empty.")

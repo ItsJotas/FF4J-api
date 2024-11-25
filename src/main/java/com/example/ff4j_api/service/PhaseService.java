@@ -1,9 +1,9 @@
 package com.example.ff4j_api.service;
 
+import com.example.ff4j_api.exception.customized.BadRequestException;
 import com.example.ff4j_api.model.Phase;
 import com.example.ff4j_api.model.dto.input.PhaseCreateDTO;
 import com.example.ff4j_api.repository.PhaseRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,11 @@ public class PhaseService {
     private final ModelMapper mapper;
 
     public Phase findById(Long phaseId) {
-        return repository.findById(phaseId).get();
+        return repository.findById(phaseId)
+                .orElseThrow(() -> new BadRequestException("Phase not found with id: " + phaseId));
     }
 
-    public void createPhase(@Valid PhaseCreateDTO phaseCreateDTO) {
+    public void createPhase(PhaseCreateDTO phaseCreateDTO) {
         Phase phase = mapper.map(phaseCreateDTO, Phase.class);
 
         repository.save(phase);
