@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
@@ -20,7 +22,16 @@ public class ApplicationService {
                 .orElseThrow(() -> new BadRequestException("Application not found with id: " + applicationId));
     }
 
+    public void verifyIfNameExists(String applicationName){
+        Application application = repository.findByName(applicationName);
+        if(Objects.nonNull(application)){
+            throw new BadRequestException("There is already an application with this name: '" + applicationName + "'");
+        }
+    }
+
     public void createApplication(ApplicationCreateDTO applicationCreateDTO) {
+        verifyIfNameExists(applicationCreateDTO.getApplicationName());
+
         Application application = mapper.map(applicationCreateDTO, Application.class);
 
         application.setIsApplicationEnabled(Boolean.TRUE);

@@ -2,8 +2,13 @@ package com.example.ff4j_api.repository;
 
 import com.example.ff4j_api.model.Application;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
+
+    @Query(value = "SELECT * FROM application WHERE application.APPLICATION_NAME = :applicationName", nativeQuery = true)
+    Application findByName(@Param("applicationName") String applicationName);
 }

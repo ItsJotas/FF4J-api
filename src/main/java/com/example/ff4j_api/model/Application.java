@@ -23,7 +23,7 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "APPLICATION_NAME", nullable = false)
+    @Column(name = "APPLICATION_NAME", nullable = false, unique = true)
     private String applicationName;
 
     @Column(name = "DESCRIPTION")

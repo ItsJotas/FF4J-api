@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class PhaseService {
@@ -20,9 +22,16 @@ public class PhaseService {
                 .orElseThrow(() -> new BadRequestException("Phase not found with id: " + phaseId));
     }
 
-    public void createPhase(PhaseCreateDTO phaseCreateDTO) {
-        Phase phase = mapper.map(phaseCreateDTO, Phase.class);
+    public void verifyIfNameExists(String phaseName){
+        Phase phase = repository.findByName(phaseName);
+        if(Objects.nonNull(phase)){
+            throw new BadRequestException("There is already an phase with this name: '" + phaseName + "'");
+        }
+    }
 
+    public void createPhase(PhaseCreateDTO phaseCreateDTO) {
+        verifyIfNameExists(phaseCreateDTO.getName());
+        Phase phase = mapper.map(phaseCreateDTO, Phase.class);
         repository.save(phase);
     }
 }
