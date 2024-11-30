@@ -32,7 +32,7 @@ public class FeatureFlag {
     private String featureKey;
 
     @Column(name = "ENABLED", nullable = false)
-    private boolean enabled;
+    private boolean enabled = true;
 
     @Column(name = "DESCRIPTION")
     private String description;

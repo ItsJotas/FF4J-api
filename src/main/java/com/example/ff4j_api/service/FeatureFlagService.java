@@ -27,6 +27,17 @@ public class FeatureFlagService {
         featureFlag.setPhase(phase);
         featureFlag.setApplication(application);
 
+        getFeatureKey(featureFlag);
+
         repository.save(featureFlag);
+    }
+
+    private void getFeatureKey(FeatureFlag featureFlag){
+        String applicationName = featureFlag.getApplication().getApplicationName().toUpperCase();
+        String phaseName = featureFlag.getPhase().getName().toUpperCase();
+        String featureName = featureFlag.getName().toUpperCase();
+
+        String featureKey = applicationName + "_" + phaseName + "_" + featureName + "_FEATURE";
+        featureFlag.setFeatureKey(featureKey);
     }
 }

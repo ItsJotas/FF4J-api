@@ -30,7 +30,7 @@ public class Application {
     private String description;
 
     @Column(name = "APPLICATION_ENABLED", nullable = false)
-    private Boolean isApplicationEnabled;
+    private Boolean isApplicationEnabled = true;
 
     @Column(name = "URL", nullable = false)
     private String url;

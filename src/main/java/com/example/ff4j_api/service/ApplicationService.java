@@ -34,7 +34,6 @@ public class ApplicationService {
 
         Application application = mapper.map(applicationCreateDTO, Application.class);
 
-        application.setIsApplicationEnabled(Boolean.TRUE);
         repository.save(application);
     }
 }
