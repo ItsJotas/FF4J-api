@@ -42,6 +42,6 @@ public class FeatureFlag {
     private Phase phase;
 
     @ManyToOne
-    @JoinColumn(name = "ID_APLICACAO", nullable = false)
+    @JoinColumn(name = "ID_APPLICATION", nullable = false)
     private Application application;
 }

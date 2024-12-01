@@ -5,9 +5,11 @@ import com.example.ff4j_api.service.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,8 +20,14 @@ public class ApplicationController {
     private final ApplicationService service;
 
     @PostMapping
-    public ResponseEntity<?> createApplication(@RequestBody @Valid ApplicationCreateDTO applicationCreateDTO){
+    public ResponseEntity<Void> createApplication(@RequestBody @Valid ApplicationCreateDTO applicationCreateDTO){
         service.createApplication(applicationCreateDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteApplication(@RequestParam("id") Long id){
+        service.deleteApplication(id);
         return ResponseEntity.ok().build();
     }
 }

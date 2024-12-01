@@ -1,13 +1,17 @@
 package com.example.ff4j_api.service;
 
 import com.example.ff4j_api.exception.customized.BadRequestException;
+import com.example.ff4j_api.model.FeatureFlag;
 import com.example.ff4j_api.model.Phase;
 import com.example.ff4j_api.model.dto.input.PhaseCreateDTO;
 import com.example.ff4j_api.repository.PhaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -16,6 +20,12 @@ public class PhaseService {
 
     private final PhaseRepository repository;
     private final ModelMapper mapper;
+    private FeatureFlagService featureFlagService;
+
+    @Autowired
+    public void setFeatureFlagService(@Lazy FeatureFlagService featureFlagService) {
+        this.featureFlagService = featureFlagService;
+    }
 
     public Phase findById(Long phaseId) {
         return repository.findById(phaseId)
@@ -33,5 +43,16 @@ public class PhaseService {
         verifyIfNameExists(phaseCreateDTO.getName());
         Phase phase = mapper.map(phaseCreateDTO, Phase.class);
         repository.save(phase);
+    }
+
+    public void deletePhase(Long phaseId) {
+        Phase phase = findById(phaseId);
+        List<FeatureFlag> featureFlags = featureFlagService.findAllFeaturesByPhaseId(phaseId);
+
+        if(!featureFlags.isEmpty()){
+            throw new BadRequestException("Cannot delete the phase because it is associated with one or more " +
+                    "feature flags.");
+        }
+        repository.delete(phase);
     }
 }

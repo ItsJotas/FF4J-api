@@ -1,5 +1,6 @@
 package com.example.ff4j_api.service;
 
+import com.example.ff4j_api.exception.customized.BadRequestException;
 import com.example.ff4j_api.model.Application;
 import com.example.ff4j_api.model.FeatureFlag;
 import com.example.ff4j_api.model.Phase;
@@ -8,6 +9,8 @@ import com.example.ff4j_api.repository.FeatureFlagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +42,23 @@ public class FeatureFlagService {
 
         String featureKey = applicationName + "_" + phaseName + "_" + featureName + "_FEATURE";
         featureFlag.setFeatureKey(featureKey);
+    }
+
+    public void deleteFeatureFlag(Long featureId) {
+        FeatureFlag featureFlag = findFeatureFlagById(featureId);
+        repository.delete(featureFlag);
+    }
+
+    public FeatureFlag findFeatureFlagById(Long featureId){
+        return repository.findById(featureId).orElseThrow(() -> new  BadRequestException("Feature Flag not found " +
+                "with id: " + featureId));
+    }
+
+    public List<FeatureFlag> findAllFeaturesByPhaseId(Long phaseId) {
+        return repository.findAllByPhaseId(phaseId);
+    }
+
+    public List<FeatureFlag> findAllFeaturesByApplicationId(Long applicationId) {
+        return repository.findAllByApplicationId(applicationId);
     }
 }
