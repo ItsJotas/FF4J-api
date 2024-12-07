@@ -4,7 +4,7 @@ import com.example.ff4j_api.exception.customized.BadRequestException;
 import com.example.ff4j_api.model.Application;
 import com.example.ff4j_api.model.FeatureFlag;
 import com.example.ff4j_api.model.dto.input.ApplicationCreateDTO;
-import com.example.ff4j_api.model.dto.output.ApplicationDTO;
+import com.example.ff4j_api.model.dto.output.ApplicationOutputDTO;
 import com.example.ff4j_api.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -63,13 +63,13 @@ public class ApplicationService {
         repository.delete(application);
     }
 
-    public Page<ApplicationDTO> getApplicationPage(String applicationName, Boolean enabled, Integer pageNumber,
-                                                   Integer pageSize, String sortBy, String orderBy) {
+    public Page<ApplicationOutputDTO> getApplicationPage(String applicationName, Boolean enabled, Integer pageNumber,
+                                                         Integer pageSize, String sortBy, String orderBy) {
         Sort.Direction direction = orderBy.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortBy));
 
         Page<Application> applicationPage = repository.findAllPage(paging, applicationName, enabled);
 
-        return applicationPage.map(a -> mapper.map(a, ApplicationDTO.class));
+        return applicationPage.map(a -> mapper.map(a, ApplicationOutputDTO.class));
     }
 }

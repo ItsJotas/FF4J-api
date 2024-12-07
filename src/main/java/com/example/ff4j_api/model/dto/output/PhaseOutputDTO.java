@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplicationDTO {
+public class PhaseOutputDTO {
 
-    private String applicationName;
-    private String description;
-    private Boolean isApplicationEnabled;
+    private Long id;
+    private String name;
 }

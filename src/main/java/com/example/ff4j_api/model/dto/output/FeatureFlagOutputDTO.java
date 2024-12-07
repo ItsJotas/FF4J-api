@@ -11,9 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FeatureFlagOutputDTO {
 
+    private Long id;
     private String name;
     private boolean enabled;
     private String description;
-    private PhaseDTO phase;
-    private ApplicationDTO application;
+    private PhaseOutputDTO phase;
+    private ApplicationOutputDTO application;
 }

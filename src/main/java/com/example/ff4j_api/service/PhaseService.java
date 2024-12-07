@@ -4,11 +4,16 @@ import com.example.ff4j_api.exception.customized.BadRequestException;
 import com.example.ff4j_api.model.FeatureFlag;
 import com.example.ff4j_api.model.Phase;
 import com.example.ff4j_api.model.dto.input.PhaseCreateDTO;
+import com.example.ff4j_api.model.dto.output.PhaseOutputDTO;
 import com.example.ff4j_api.repository.PhaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,5 +59,16 @@ public class PhaseService {
                     "feature flags.");
         }
         repository.delete(phase);
+    }
+
+    public Page<PhaseOutputDTO> getPhasePage(String name, Integer pageNumber, Integer pageSize, String sortBy,
+                                             String orderBy) {
+
+        Sort.Direction direction = orderBy.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortBy));
+
+        Page<Phase> phasePage = repository.findAllPage(paging, name);
+
+        return phasePage.map(p -> mapper.map(p, PhaseOutputDTO.class));
     }
 }

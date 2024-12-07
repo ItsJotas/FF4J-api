@@ -1,7 +1,7 @@
 package com.example.ff4j_api.controller;
 
 import com.example.ff4j_api.model.dto.input.ApplicationCreateDTO;
-import com.example.ff4j_api.model.dto.output.ApplicationDTO;
+import com.example.ff4j_api.model.dto.output.ApplicationOutputDTO;
 import com.example.ff4j_api.service.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,14 +35,14 @@ public class ApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ApplicationDTO>> getApplicationPage(
+    public ResponseEntity<Page<ApplicationOutputDTO>> getApplicationPage(
             @RequestParam(value = "applicationName", required = false) String applicationName,
             @RequestParam(value = "enabled", required = false) Boolean enabled,
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String order){
-        Page<ApplicationDTO> applicationDTOPage = service.getApplicationPage(applicationName, enabled, pageNumber,
+        Page<ApplicationOutputDTO> applicationDTOPage = service.getApplicationPage(applicationName, enabled, pageNumber,
                 pageSize, sort, order);
         return ResponseEntity.ok().body(applicationDTOPage);
     }
