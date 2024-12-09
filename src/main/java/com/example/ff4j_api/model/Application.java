@@ -29,8 +29,8 @@ public class Application {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "APPLICATION_ENABLED", nullable = false)
-    private Boolean isApplicationEnabled = true;
+    @Column(name = "APPLICATION_ONLINE", nullable = false)
+    private Boolean isApplicationOnline = true;
 
     @Column(name = "URL", nullable = false)
     private String url;

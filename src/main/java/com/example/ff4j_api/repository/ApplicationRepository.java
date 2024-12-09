@@ -16,8 +16,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     @Query(value = "SELECT * FROM application " +
             "    WHERE (:applicationName IS NULL OR LOWER(APPLICATION_NAME) LIKE LOWER(CONCAT('%', :applicationName, '%'))) " +
-            "      AND (:enabled IS NULL OR APPLICATION_ENABLED = :enabled) ", nativeQuery = true)
+            "      AND (:online IS NULL OR APPLICATION_ONLINE = :online) ", nativeQuery = true)
     Page<Application> findAllPage(Pageable paging,
                                      @Param("applicationName") String applicationName,
-                                     @Param("enabled") Boolean enabled);
+                                     @Param("online") Boolean online);
 }

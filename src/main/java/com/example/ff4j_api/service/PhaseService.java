@@ -75,8 +75,8 @@ public class PhaseService {
 
     @Transactional
     public void updatePhase(Long id, String name) {
-        Phase phase = findById(id);
         verifyIfNameExists(name);
+        Phase phase = findById(id);
         phase.setName(name);
         repository.save(phase);
     }

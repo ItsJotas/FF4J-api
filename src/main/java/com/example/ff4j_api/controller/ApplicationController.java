@@ -2,18 +2,13 @@ package com.example.ff4j_api.controller;
 
 import com.example.ff4j_api.model.dto.input.ApplicationCreateDTO;
 import com.example.ff4j_api.model.dto.output.ApplicationOutputDTO;
+import com.example.ff4j_api.model.dto.update.ApplicationUpdateDTO;
 import com.example.ff4j_api.service.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/application")
@@ -37,13 +32,20 @@ public class ApplicationController {
     @GetMapping
     public ResponseEntity<Page<ApplicationOutputDTO>> getApplicationPage(
             @RequestParam(value = "applicationName", required = false) String applicationName,
-            @RequestParam(value = "enabled", required = false) Boolean enabled,
+            @RequestParam(value = "online", required = false) Boolean online,
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "desc") String order){
-        Page<ApplicationOutputDTO> applicationDTOPage = service.getApplicationPage(applicationName, enabled, pageNumber,
+        Page<ApplicationOutputDTO> applicationDTOPage = service.getApplicationPage(applicationName, online, pageNumber,
                 pageSize, sort, order);
         return ResponseEntity.ok().body(applicationDTOPage);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateApplication(@PathVariable("id") Long id,
+                                                  @RequestBody ApplicationUpdateDTO applicationUpdateDTO){
+        service.updateApplication(id, applicationUpdateDTO);
+        return ResponseEntity.ok().build();
     }
 }

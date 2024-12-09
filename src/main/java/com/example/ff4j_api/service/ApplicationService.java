@@ -5,6 +5,7 @@ import com.example.ff4j_api.model.Application;
 import com.example.ff4j_api.model.FeatureFlag;
 import com.example.ff4j_api.model.dto.input.ApplicationCreateDTO;
 import com.example.ff4j_api.model.dto.output.ApplicationOutputDTO;
+import com.example.ff4j_api.model.dto.update.ApplicationUpdateDTO;
 import com.example.ff4j_api.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -63,13 +64,20 @@ public class ApplicationService {
         repository.delete(application);
     }
 
-    public Page<ApplicationOutputDTO> getApplicationPage(String applicationName, Boolean enabled, Integer pageNumber,
+    public Page<ApplicationOutputDTO> getApplicationPage(String applicationName, Boolean online, Integer pageNumber,
                                                          Integer pageSize, String sortBy, String orderBy) {
         Sort.Direction direction = orderBy.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortBy));
 
-        Page<Application> applicationPage = repository.findAllPage(paging, applicationName, enabled);
+        Page<Application> applicationPage = repository.findAllPage(paging, applicationName, online);
 
         return applicationPage.map(a -> mapper.map(a, ApplicationOutputDTO.class));
+    }
+
+    public void updateApplication(Long id, ApplicationUpdateDTO applicationUpdateDTO) {
+        verifyIfNameExists(applicationUpdateDTO.getApplicationName());
+        Application application = findById(id);
+        application = mapper.map(applicationUpdateDTO, Application.class);
+        repository.save(application);
     }
 }
