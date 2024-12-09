@@ -6,6 +6,7 @@ import com.example.ff4j_api.model.Phase;
 import com.example.ff4j_api.model.dto.input.PhaseCreateDTO;
 import com.example.ff4j_api.model.dto.output.PhaseOutputDTO;
 import com.example.ff4j_api.repository.PhaseRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,13 @@ public class PhaseService {
         Page<Phase> phasePage = repository.findAllPage(paging, name);
 
         return phasePage.map(p -> mapper.map(p, PhaseOutputDTO.class));
+    }
+
+    @Transactional
+    public void updatePhase(Long id, String name) {
+        Phase phase = findById(id);
+        verifyIfNameExists(name);
+        phase.setName(name);
+        repository.save(phase);
     }
 }

@@ -16,7 +16,7 @@ public interface PhaseRepository extends JpaRepository<Phase, Long> {
     @Query(value = "SELECT * FROM phase WHERE phase.NAME = :phaseName", nativeQuery = true)
     Phase findByName(@Param("phaseName") String phaseName);
 
-    @Query(value = "SELECT * FROM feature_flag " +
-            "    WHERE (:name IS NULL OR LOWER(NAME) LIKE LOWER(CONCAT('%', :name, '%'))) ", nativeQuery = true)
+    @Query(value = "SELECT * FROM phase " +
+            "WHERE (:name IS NULL OR LOWER(NAME) LIKE LOWER(CONCAT('%', :name, '%'))) ", nativeQuery = true)
     Page<Phase> findAllPage(Pageable paging, @RequestParam("name") String name);
 }

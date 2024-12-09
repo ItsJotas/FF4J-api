@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class PhaseController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PhaseOutputDTO>> getFeatureFlagPage(
+    public ResponseEntity<Page<PhaseOutputDTO>> getPhasePage(
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
@@ -45,5 +46,11 @@ public class PhaseController {
     ){
         Page<PhaseOutputDTO> phasePage = service.getPhasePage(name, pageNumber, pageSize, sort, order);
         return ResponseEntity.ok(phasePage);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updatePhase(@PathVariable("id") Long id, @RequestParam("name") String name){
+        service.updatePhase(id, name);
+        return ResponseEntity.ok().build();
     }
 }
