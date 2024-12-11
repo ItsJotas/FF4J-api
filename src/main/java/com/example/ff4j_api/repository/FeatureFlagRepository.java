@@ -29,4 +29,7 @@ public interface FeatureFlagRepository extends JpaRepository<FeatureFlag, Long> 
                                   @Param("enabled") Boolean enabled,
                                   @Param("phaseId") Long phaseId,
                                   @Param("applicationId") Long applicationId);
+
+    @Query(value = "SELECT * FROM feature_flag WHERE FEATURE_KEY = :featureKey", nativeQuery = true)
+    FeatureFlag getFeatureFlagByKey(@Param("featureKey") String featureKey);
 }

@@ -6,6 +6,7 @@ import com.example.ff4j_api.model.FeatureFlag;
 import com.example.ff4j_api.model.Phase;
 import com.example.ff4j_api.model.dto.input.FeatureFlagCreateDTO;
 import com.example.ff4j_api.model.dto.output.FeatureFlagOutputDTO;
+import com.example.ff4j_api.model.dto.update.FeatureFlagUpdateDTO;
 import com.example.ff4j_api.repository.FeatureFlagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ public class FeatureFlagService {
         featureFlag.setApplication(application);
 
         getFeatureKey(featureFlag);
+        verifyRepeatedFeatureKey(featureFlag.getFeatureKey());
 
         repository.save(featureFlag);
     }
@@ -76,5 +79,32 @@ public class FeatureFlagService {
         Page<FeatureFlag> featureFlagPage = repository.findAllPage(paging, name, enabled, phaseId, applicationId);
 
         return featureFlagPage.map(f -> mapper.map(f, FeatureFlagOutputDTO.class));
+    }
+
+    public void updateFeatureFlag(Long id, FeatureFlagUpdateDTO updateDTO) {
+        FeatureFlag featureFlag = findFeatureFlagById(id);
+
+        if(Objects.nonNull(updateDTO.getPhaseId())){
+            Phase phase = phaseService.findById(updateDTO.getPhaseId());
+            featureFlag.setPhase(phase);
+        }
+
+        if(Objects.nonNull(updateDTO.getApplicationId())){
+            Application application = applicationService.findById(updateDTO.getApplicationId());
+            featureFlag.setApplication(application);
+        }
+
+        mapper.map(updateDTO, featureFlag);
+        getFeatureKey(featureFlag);
+        verifyRepeatedFeatureKey(featureFlag.getFeatureKey());
+
+        repository.save(featureFlag);
+    }
+
+    private void verifyRepeatedFeatureKey(String featureKey) {
+        FeatureFlag repeatedFeatureKey = repository.getFeatureFlagByKey(featureKey);
+        if(Objects.nonNull(repeatedFeatureKey)){
+            throw new BadRequestException("A Feature Flag with the specified name, phase, and application already exists.");
+        }
     }
 }
